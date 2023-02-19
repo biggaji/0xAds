@@ -3,9 +3,113 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin", "debian-openssl-1.1.x"]
+
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Campaigns {
+  id String @id @default(uuid())
+  active Boolean @default(false)
+  budget Int
+  currency Currency
+  frequency Frequency
+  objective Campaign_objective
+  oxer_id String
+  start_date String
+  end_date String
+  ads_copy AdsCopies?
+  target_delivery AdsTargetDeliveries?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model AdsCopies {
+  id String @id @default(uuid())
+  medias String[]
+  type Ad_copy_type
+  text String @db.VarChar(250)
+  campaign Campaigns @relation(fields: [campaign_id], references: [id])
+  campaign_id String @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model AdsTargetDeliveries {
+  id String @id @default(uuid())
+  gender Gender_group
+  age_group Age_group
+  max_age Int
+  min_age Int
+  locations Locations[]
+  keywords String[]
+  interests Interests[]
+  languages Languages[]
+  os Os[]
+  campaign Campaigns @relation(fields: [campaign_id], references: [id])
+  campaign_id String @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum Languages {
+  EN
+  YR
+}
+
+enum Locations {
+  US
+  NG
+}
+
+enum Interests {
+  POLITICS
+  MUSIC
+  ARTS
+}
+
+enum Os {
+  ANDRIOD
+  IOS
+  DESKTOP
+  MOBILE_DEVICES
+  ALL
+}
+
+enum Ad_copy_type {
+  PHOTO
+  VIDEO
+}
+
+enum Gender_group {
+  MALE
+  FEMALE
+  ALL
+}
+
+enum Campaign_objective {
+  REACH
+  ENGAGEMENT
+  WEBSITE_TRAFFIC
+  APP_INSTALL
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum Currency {
+  NGN
+  PRSH
+}
+
+enum Age_group {
+  ALL
+  SELECT_AGE
 }
