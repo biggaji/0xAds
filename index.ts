@@ -2,7 +2,6 @@ import * as dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
-
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
@@ -13,27 +12,10 @@ import { engine } from "express-handlebars";
 import { ApolloServerContext } from "./interfaces/apollo.interface";
 import * as path from "path";
 import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const typeDefs = `#graphql
-  type User {
-    name: String
-  }
-
-  type Query {
-    user: String
-  }
-`;
-
-const resolvers = {
-  Query: {
-    user: () => {
-      return "Hey 0xAds";
-    },
-  }
-}
+import typeDefs from "./graphql/typeDefs.js";
+import resolvers from "./graphql/resolvers.js";
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
