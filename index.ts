@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import express, { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import http from "http";
 import { engine } from "express-handlebars";
