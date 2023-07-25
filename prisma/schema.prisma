@@ -1,10 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native", "darwin", "debian-openssl-1.1.x"]
-
 }
 
 datasource db {
@@ -15,60 +11,59 @@ datasource db {
 model Campaigns {
   id String @id @default(uuid())
   active Boolean @default(false)
-  budget Int
+  dailyBudget Int
   currency Currency
   frequency Frequency
-  objective Campaign_objective
-  oxer_id String
-  start_date String
-  end_date String
-  ads_copy AdsCopies?
-  target_delivery AdsTargetDeliveries?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  objective CampaignObjective
+  oxerId String
+  startDate String
+  endDate String
+  adsCopy AdCopies?
+  targetDelivery AdTargetDeliveries?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model AdsCopies {
+model AdCopies {
   id String @id @default(uuid())
-  medias String[]
-  type Ad_copy_type
-  text String @db.VarChar(250)
-  campaign Campaigns @relation(fields: [campaign_id], references: [id])
-  campaign_id String @unique
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  mediaLink String
+  type AdCopyType
+  websiteUrl String?
+  text String @db.VarChar(280)
+  campaign Campaigns @relation(fields: [campaignId], references: [id])
+  campaignId String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model AdsTargetDeliveries {
+model AdTargetDeliveries {
   id String @id @default(uuid())
-  gender Gender_group
-  age_group Age_group
-  max_age Int
-  min_age Int
-  locations Locations[]
-  keywords String[]
+  gender GenderGroup
+  ageGoup AgeGroup
+  maxAge Int?
+  minAge Int?
   interests Interests[]
   languages Languages[]
   os Os[]
-  campaign Campaigns @relation(fields: [campaign_id], references: [id])
-  campaign_id String @unique
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  campaign Campaigns @relation(fields: [campaignId], references: [id])
+  campaignId String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Languages {
-  EN
-  YR
-}
-
-enum Locations {
-  US
-  NG
+  ENGLISH
+  YORUBA
+  SPANISH
 }
 
 enum Interests {
   POLITICS
   MUSIC
+  TECH
+  CELEBRITIES
+  NEW
+  BUSINESS
   ARTS
 }
 
@@ -80,18 +75,18 @@ enum Os {
   ALL
 }
 
-enum Ad_copy_type {
+enum AdCopyType {
   PHOTO
   VIDEO
 }
 
-enum Gender_group {
+enum GenderGroup {
   MALE
   FEMALE
-  ALL
+  ANY
 }
 
-enum Campaign_objective {
+enum CampaignObjective {
   REACH
   ENGAGEMENT
   WEBSITE_TRAFFIC
@@ -109,7 +104,7 @@ enum Currency {
   PRSH
 }
 
-enum Age_group {
+enum AgeGroup {
   ALL
   SELECT_AGE
 }
