@@ -71,7 +71,7 @@ enum Os {
   ANDRIOD
   IOS
   DESKTOP
-  MOBILE_DEVICES
+  MOBILE
   ALL
 }
 

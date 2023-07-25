@@ -57,6 +57,7 @@ const typeDefs = `#graphql
     mediaLink: String!
     type: AdCopyType!
     text: String!
+    websiteUrl: String
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -95,7 +96,7 @@ const typeDefs = `#graphql
     ANDRIOD,
     IOS,
     DESKTOP,
-    MOBILE_DEVICES,
+    MOBILE,
     ALL
   }
 
@@ -141,21 +142,21 @@ const typeDefs = `#graphql
 
   "Input Types for creating Ad"
   input AdCampaignInput {
-    dailyBudget Int!
-    currency Currency!
-    frequency Frequency!
-    objective CampaignObjective!
-    startDate DateTime!
-    endDate DateTime!
+    dailyBudget: Int!
+    currency: Currency!
+    frequency: Frequency!
+    objective: CampaignObjective!
+    startDate: DateTime!
+    endDate: DateTime!
   }
 
   "Input Type for Attaching the Ad Copy to the AdCampaign"
   input AdCopyInput {
-    text String!
-    mediaLink String!
-    websiteUrl String
-    type AdCopyType!
-    campaignId String!
+    text: String!
+    mediaLink: String!
+    websiteUrl: String
+    type: AdCopyType!
+    campaignId: String!
   }
 
   "Input Type for Attaching the Ad Target to the AdCampaign"
@@ -211,9 +212,9 @@ const typeDefs = `#graphql
   }
 
   type Mutation {
-    createAdCampaign(adCampaignInput: AdCampaignInput): AdsCampaign
-    createAdCampaignCopy(adCopyInput: AdCopyInput): AdsCopy
-    createAdCampaignTargetDelivery(adTargetInput: AdTargetInput): TargetDelivery
+    createAdCampaign(adCampaignInput: AdCampaignInput): CreateAdCampaignResponse!
+    createAdCampaignCopy(adCopyInput: AdCopyInput): CreateAdCopyResponse!
+    createAdCampaignTarget(adTargetInput: AdTargetInput): CreateAdTargetResponse!
   }
 `;
 
