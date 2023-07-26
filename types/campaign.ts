@@ -30,7 +30,6 @@ type AdTargetDelivery = {
   ageGroup: AgeGroup,
   maxAge?: number,
   minAge?: number,
-  keywords?: string[],
   interests?: Interests[],
   languages?: Languages[],
   os?: Os[],
@@ -38,19 +37,19 @@ type AdTargetDelivery = {
   updatedAt: Date,
 }
 
-type AdCampaignInput = {
+interface AdCampaignInput {
   dailyBudget: number,
   currency: Currency,
   frequency: Frequency,
   objective: CampaignObjective,
-  startDate: Date,
-  endDate: Date
+  startDate: string,
+  endDate: string
 }
 
 type AdCopyInput = {
   text: string,
   mediaLink: string,
-  websiteUrl: string,
+  websiteUrl?: string,
   type: AdCopyType,
   campaignId: string,
 }
@@ -60,11 +59,18 @@ type AdTargetInput = {
   ageGroup: AgeGroup,
   maxAge: number,
   minAge: number
-  keywords: string[],
   interests: Interests[],
   languages: Languages[],
   os: Os[],
   campaignId: string
+}
+
+type CampaignQueryCriterial = {
+  gender?: GenderGroup,
+  age?: number,
+  interests?: Interests[],
+  languages?: Languages[],
+  os: Os[],
 }
 
 enum Currency {

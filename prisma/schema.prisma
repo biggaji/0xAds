@@ -39,7 +39,7 @@ model AdCopies {
 model AdTargetDeliveries {
   id String @id @default(uuid())
   gender GenderGroup
-  ageGoup AgeGroup
+  ageGroup AgeGroup
   maxAge Int?
   minAge Int?
   interests Interests[]

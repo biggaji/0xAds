@@ -69,7 +69,6 @@ const typeDefs = `#graphql
     ageGroup: AgeGroup!
     maxAge: Int!
     minAge: Int!
-    keywords: [String]
     interests: [Interests]
     languages: [Languages]
     os: [Os]
@@ -165,22 +164,22 @@ const typeDefs = `#graphql
     ageGroup: AgeGroup!
     maxAge: Int
     minAge: Int
-    keywords: [String]
     interests: [Interests]
     languages: [Languages]
     os: [Os]
     campaignId: String!
   }
 
- # Will later create an Interface that each response will extend to compily with DRY principle
-
-  enum ErrorCode {
-    UNAUTHORIZED,
-    BAD_REQUEST,
-    FORBIDDEN,
-    NOT_FOUND,
-    INTERNAL_SERVER_ERROR
+  "Input Type or Input criteria for querying or fetching a campaign"
+  input CampaignRequestQuery {
+    gender: GenderGroup
+    age: Int
+    interests: [Interests]
+    languages: [Languages]
+    os: [Os!]
   }
+
+ # Will later create an Interface that each response will extend to compily with DRY principle
 
   "AdCampaign creation response"
   type CreateAdCampaignResponse {
