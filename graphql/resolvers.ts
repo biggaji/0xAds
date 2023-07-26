@@ -1,5 +1,8 @@
-import { AdCampaign } from "../types/campaign";
-import { dateScalarType } from "./typeDefs";
+import { AdCampaign } from "../types/campaign.js";
+import { dateScalarType } from "./typeDefs.js";
+import AdService from "../services/adService.js";
+
+const adService = new AdService();
 
 const resolvers = {
   Query: {
@@ -13,23 +16,23 @@ const resolvers = {
 
   Mutation: {
     createAdCampaign: function(root, args:any, context:any) {
-      return
+      return {};
     },
     createAdCampaignCopy: function(root, args:any, context:any) {
-      return
+      return {};
     },
     createAdCampaignTarget: function(root, args:any, context:any) {
-      return
+      return {};
     }
   },
 
-  AdCopy: function(adCampaign:AdCampaign, args:any, context:any) {
-    return;
-  },
+  // AdCopy: function(adCampaign:AdCampaign, args:any, context:any) {
+  //   return {};
+  // },
 
-  AdTarget: function(adCampaign:AdCampaign, args:any, context:any) {
-    return;
-  },
+  // AdTarget: function(adCampaign:AdCampaign, args:any, context:any) {
+  //   return {};
+  // },
   DateTime: dateScalarType,
 }
 

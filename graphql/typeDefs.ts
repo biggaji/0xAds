@@ -172,7 +172,7 @@ const typeDefs = `#graphql
     campaignId: String!
   }
 
-  // Will later create an Interface that each response will extend to compily with DRY principle
+ # Will later create an Interface that each response will extend to compily with DRY principle
 
   enum ErrorCode {
     UNAUTHORIZED,
@@ -203,7 +203,7 @@ const typeDefs = `#graphql
     success: Boolean!
     code: ErrorCode!
     message: String!
-    adTarget: AdTarget
+    adTarget: AdTargetDelivery
   }
 
   type Query {

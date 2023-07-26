@@ -5,10 +5,12 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "./dist",
+    "rootDir": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": false,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }
