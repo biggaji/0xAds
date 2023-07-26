@@ -6,7 +6,9 @@ const adRepo = new AdRepository();
 export default class AdService {
   constructor() {}
 
-  async createAdCampaign() {}
+  async createAdCampaign() {
+    // data validation is done here
+  }
 
   async attachAdCopyToAdCampaign() {}
 

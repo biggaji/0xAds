@@ -51,3 +51,11 @@ export default class ErrorHelper {
     }
   }
 }
+
+export class PrismaErrorHelper {
+  constructor() {}
+
+  static ProcessError(error:any) {
+
+  } 
+}
