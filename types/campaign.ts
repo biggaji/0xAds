@@ -67,7 +67,8 @@ type AdTargetInput = {
 
 type CampaignQueryCriterial = {
   gender?: GenderGroup,
-  age?: number,
+  maxAge?: number,
+  minAge?: number,
   interests?: Interests[],
   languages?: Languages[],
   os: Os[],

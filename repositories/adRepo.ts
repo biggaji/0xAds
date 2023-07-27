@@ -1,5 +1,5 @@
 import db from "../@utils/db.js";
-import { AdCampaign, AdCampaignInput, AdCopyInput, AdTargetInput } from "../types/campaign.js";
+import { AdCampaign, AdCampaignInput, AdCopyInput, AdTargetInput, CampaignQueryCriterial } from "../types/campaign.js";
 
 // extend the "AdCampaignInput" interface to include extra fields needed to insert into database
 interface AdCampaignInputExtension extends AdCampaignInput {
@@ -62,24 +62,21 @@ export default class AdRepository {
    * @memberof AdRepository
    * It search for a campaign via it targetDelivery options - "age", "gender", "intrests", "languages", "os". "os" is required but others are optional
    */
-  async fetchAdCampaign(query:any) {
+  async fetchAdCampaign(query:CampaignQueryCriterial) {
     try {
       const response = await db.campaigns.findFirst({
         where: {
-          active: true,
+          // active: true,
           targetDelivery: {
             is: {
-              os: { has: query.os },
+              os: { hasSome:query.os },
+              interests: query.interests ? { hasSome: query.interests } : undefined,
+              gender: query.gender ? { equals: query.gender } : undefined,
+              languages: query.languages ? { hasSome: query.languages } : undefined,
+              maxAge: query.maxAge ? { lte: query.maxAge } : undefined,
+              minAge: query.minAge ? { gte: query.minAge } : undefined,
             },
-            // AND: [{
-            //   interests: { hasSome: query.intrests},
-            //   languages: { hasSome: query.languages}
-            // }]
           },
-        },
-        include: {
-          adsCopy: true,
-          targetDelivery: true
         }
       });
       return response;

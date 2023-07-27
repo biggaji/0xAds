@@ -182,7 +182,8 @@ const typeDefs = `#graphql
   "Input Type or Input criteria for querying or fetching a campaign"
   input CampaignRequestQuery {
     gender: GenderGroup
-    age: Int
+    maxAge: Int,
+    minAge: Int,
     interests: [Interests]
     languages: [Languages]
     os: [Os!]
@@ -223,7 +224,7 @@ const typeDefs = `#graphql
   }
 
   type Query {
-    fetchAdCampaign(campaignId: String!): AdCampaign!
+    fetchAdCampaign(query: CampaignRequestQuery!): AdCampaign!
     fetchAdCampaigns: [AdCampaign]!
   }
 

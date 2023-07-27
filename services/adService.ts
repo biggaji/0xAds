@@ -243,68 +243,29 @@ export default class AdService {
   }
 
   async fetchAdCampaign(query: CampaignQueryCriterial) {
+    const { os } = query;
     try {
     //   // data validation is done here
-    //   if (!currency) {
-    //     throw new GraphQLError('Choose a valid currency option', {
-    //       extensions: {
-    //         code: ErrorCode.BAD_USER_INPUT,
-    //         argumentName: 'currency'
-    //       }
-    //     })
-    //   }
+      if (!os || os.length === 0) {
+        throw new GraphQLError('os is required', {
+          extensions: {
+            code: ErrorCode.BAD_USER_INPUT,
+            argumentName: 'os'
+          }
+        })
+      }
 
-    //   if (!dailyBudget || dailyBudget <= 0) {
-    //     throw new GraphQLError('Provide a valid budget amount', {
-    //       extensions: {
-    //         code: ErrorCode.BAD_USER_INPUT,
-    //         argumentName: 'dailyBudget'
-    //       }
-    //     })
-    //   }
+      const campaign = await adRepo.fetchAdCampaign(query);
 
-    //   if (!startDate || !endDate) {
-    //     throw new GraphQLError('Provide a valid date format', {
-    //       extensions: {
-    //         code: ErrorCode.BAD_USER_INPUT,
-    //         argumentName: 'startDate || endDate'
-    //       }
-    //     })
-    //   }
-
-    //   if (!frequency) {
-    //     throw new GraphQLError('Choose a valid frequency option', {
-    //       extensions: {
-    //         code: ErrorCode.BAD_USER_INPUT,
-    //         argumentName: 'frequency'
-    //       }
-    //     })
-    //   }
-
-    //   if (!objective) {
-    //     throw new GraphQLError('Choose a valid ad objective option', {
-    //       extensions: {
-    //         code: ErrorCode.BAD_USER_INPUT,
-    //         argumentName: 'objective'
-    //       }
-    //     })
-    //   }
-
-    //   const oxerId = `${Math.floor(Math.random() * 1000) + 1}`;
-
-    //   // hydrate payload object
-    //   const hydratedCampaignPayload = {
-    //     oxerId,
-    //     frequency,
-    //     objective,
-    //     endDate,
-    //     startDate,
-    //     currency,
-    //     dailyBudget
-    //   };
-
-    //   const campaign = await adRepo.recordAdCampaign(hydratedCampaignPayload);
-    //   return campaign;
+      if (campaign === null) {
+        throw new GraphQLError('campaign not found', {
+          extensions: {
+            code: ErrorCode.NOT_FOUND,
+          }
+        })
+      }
+      
+      return campaign;
     } catch (error) {
       throw error;
     }
