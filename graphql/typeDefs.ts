@@ -1,14 +1,19 @@
 import { GraphQLError, GraphQLScalarType, Kind } from "graphql";
+import { ErrorCode } from "../@commons/errorHelper.js";
 
-export const dateScalarType = new GraphQLScalarType({
+export const dateScalarResolver = new GraphQLScalarType({
   name: "DateTime",
   description: "A custom scalar type representing a date format",
-  // converts the date from the back-end format to an int like date in seconds
+  // converts the date from the back-end format to an ISO format
   serialize(value) {
     if (value instanceof Date) {
-      return value.getTime();
+      return value.toISOString();
     } else {
-      throw new GraphQLError("Date serializer expected a `DateTime` object");
+      throw new GraphQLError("Date serializer expected a `DateTime` object", {
+        extensions: {
+          code: ErrorCode.INTERNAL_SERVER_ERROR
+        }
+      });
     }
   },
     //This function is called when the DateTime type is used in argument as a scalar type and the value is hardcoded
@@ -22,10 +27,14 @@ export const dateScalarType = new GraphQLScalarType({
   //This function is called when the DateTime type is used in a variable as argument type
   // converts the value to the back-end date format
   parseValue(value) {
-    if (typeof value === "number") {
+    if (typeof value === "string") {
       return new Date(value);
     } else {
-      throw new GraphQLError("Date scalar parser expected a `number`")
+      throw new GraphQLError("Date scalar parser expected a `string`", {
+        extensions: {
+          code: ErrorCode.INTERNAL_SERVER_ERROR
+        }
+      })
     }
   }
 });
@@ -45,8 +54,8 @@ const typeDefs = `#graphql
     oxerId: String
     startDate: DateTime!
     endDate: DateTime!
-    adsCopy: AdCopy!
-    targetDelivery: AdTargetDelivery!
+    adsCopy: AdCopy
+    targetDelivery: AdTargetDelivery
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -55,7 +64,7 @@ const typeDefs = `#graphql
   type AdCopy {
     id: ID!
     mediaLink: String!
-    type: AdCopyType!
+    type: AdCopyEnum!
     text: String!
     websiteUrl: String
     createdAt: DateTime!
@@ -100,7 +109,7 @@ const typeDefs = `#graphql
   }
 
   "Ads Media type"
-  enum AdCopyType {
+  enum AdCopyEnum {
     PHOTO,
     VIDEO
   }
@@ -154,7 +163,7 @@ const typeDefs = `#graphql
     text: String!
     mediaLink: String!
     websiteUrl: String
-    type: AdCopyType!
+    type: AdCopyEnum!
     campaignId: String!
   }
 
@@ -180,6 +189,14 @@ const typeDefs = `#graphql
   }
 
  # Will later create an Interface that each response will extend to compily with DRY principle
+  enum ErrorCode {
+    UNAUTHENTICATED,
+    BAD_REQUEST,
+    FORBIDDEN,
+    NOT_FOUND,
+    INTERNAL_SERVER_ERROR,
+    BAD_USER_INPUT
+  }
 
   "AdCampaign creation response"
   type CreateAdCampaignResponse {
@@ -211,9 +228,9 @@ const typeDefs = `#graphql
   }
 
   type Mutation {
-    createAdCampaign(adCampaignInput: AdCampaignInput): CreateAdCampaignResponse!
-    createAdCampaignCopy(adCopyInput: AdCopyInput): CreateAdCopyResponse!
-    createAdCampaignTarget(adTargetInput: AdTargetInput): CreateAdTargetResponse!
+    createAdCampaign(adCampaignInput: AdCampaignInput): AdCampaign!
+    createAdCampaignCopy(adCopyInput: AdCopyInput): AdCopy!
+    createAdCampaignTarget(adTargetInput: AdTargetInput): AdTargetDelivery!
   }
 `;
 

@@ -1,52 +1,31 @@
-import * as dotenv from "dotenv";
+/**
+ * Setup env loader using dotenv package
+ * use the package only in development
+ */
+import { config } from "dotenv";
 if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+  config();
+};
+
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import express, { ErrorRequestHandler, NextFunction, Request, Response } from "express";
-import cors from "cors";
-import http from "http";
-import { engine } from "express-handlebars";
-import { ApolloServerContext } from "./interfaces/apollo.interface";
-import typeDefs from "./graphql/typeDefs.js";
+import { startStandaloneServer } from '@apollo/server/standalone';
 import resolvers from "./graphql/resolvers.js";
+import typeDefs from "./graphql/typeDefs.js";
+import ErrorHelper from "./@commons/errorHelper.js";
+import { error } from "console";
 
-const app = express();
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(cors({ origin: "*" }));
-
-// Apollo server setup
-const httpServer = http.createServer(app);
-const graphqlServer = new ApolloServer<ApolloServerContext>({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
-})
-
-await graphqlServer.start();
-
-app.use(`/graphql`, cors<cors.CorsRequest>(), expressMiddleware(graphqlServer, {
-  context: async ({ req }) => ({ token: req.headers.token }),
-}))
-
-app.engine("hbs", engine({ defaultLayout: "main", extname: "hbs" }));
-app.set("view engine", 'hbs');
-app.set("views", './views');
-
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.render('index', { title: "0xAds campaign"});
+const server = new ApolloServer({ typeDefs, resolvers,
+  // use the formatError hook to modify error before it's sent back to the client
+  formatError: (fmtError, origError) => {
+    console.log(fmtError)
+    return ErrorHelper.ProcessError(fmtError);
+  }
 });
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  res.json({
-    message: "an error occured",
-    error: err.name
-  });
+const PORT = process.env.PORT as unknown as number;
+
+const { url } = await startStandaloneServer(server, {
+  listen: { port: PORT }
 });
 
-const PORT = process.env.PORT || 3000;
-await new Promise<void>((resolve) => httpServer.listen({ port: PORT }, resolve));
-console.log(`🚀 Server ready at http://localhost:${PORT}/graphql`);
+console.log(`🚀  Server ready at: ${url}`);

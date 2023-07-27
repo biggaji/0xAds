@@ -59,8 +59,8 @@ type AdTargetInput = {
   ageGroup: AgeGroup,
   maxAge: number,
   minAge: number
-  interests: Interests[],
-  languages: Languages[],
+  interests?: Interests[],
+  languages?: Languages[],
   os: Os[],
   campaignId: string
 }
@@ -129,5 +129,5 @@ enum AgeGroup {
 
 
 export {
-  AdCampaign, AdCopy, AdTargetDelivery, AdCopyInput, AdTargetInput, AdCampaignInput
+  AdCampaign, AdCopy, AdTargetDelivery, AdCopyInput, AdTargetInput, AdCampaignInput, CampaignQueryCriterial
 }

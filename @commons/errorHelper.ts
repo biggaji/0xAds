@@ -1,4 +1,4 @@
-enum ErrorCode {
+export enum ErrorCode {
   UNAUTHENTICATED="UNAUTHENTICATED",
   BAD_REQUEST="BAD_REQUEST",
   FORBIDDEN="FORBIDDEN",
@@ -23,7 +23,7 @@ type ErrorReturnType = { message: string, code: string, success: boolean , argum
  * @description Intercerpts and re-formats the error object into a clean readable response for the client and abstract away any internal error details
  */
 export default class ErrorHelper {
-  static ProcessError(error: ErrorType): ErrorReturnType {
+  static ProcessError(error): ErrorReturnType {
     switch(error.extensions.code) {
       case ErrorCode.UNAUTHENTICATED:
       case ErrorCode.FORBIDDEN:

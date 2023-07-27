@@ -19,7 +19,7 @@ export default class AdRepository {
       const response = await db.campaigns.create({
         data: { currency, dailyBudget, endDate, startDate, frequency, objective, oxerId }, include: { adsCopy: true, targetDelivery: true }
       });
-
+      
       return response;
     } catch (error) {
       throw error;
@@ -81,7 +81,62 @@ export default class AdRepository {
           adsCopy: true,
           targetDelivery: true
         }
-      })
+      });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAdCampaignById(campaignId: string) {
+    try {
+      const campaign = await db.campaigns.findUnique({
+        where: {
+          id: campaignId
+        }
+      });
+
+      if (campaign === null) {
+        return null;
+      } else {
+        return campaign;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAdTargetByCampaignId(campaignId: string) {
+    try {
+      const target = await db.adTargetDeliveries.findUnique({
+        where: {
+          campaignId: campaignId
+        }
+      });
+
+      if (target === null) {
+        return null;
+      } else {
+        return target;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAdCopyByCampaignId(campaignId: string) {
+    try {
+      const copy = await db.adCopies.findUnique({
+        where: {
+          campaignId: campaignId
+        }
+      });
+
+      if (copy === null) {
+        return null;
+      } else {
+        return copy;
+      }
     } catch (error) {
       throw error;
     }
@@ -91,13 +146,6 @@ export default class AdRepository {
     try {
       const response = await db.campaigns.findMany(
         {
-          where: {
-            active: true
-          },
-          include: {
-            adsCopy: true,
-            targetDelivery: true
-          },
           orderBy: {
             createdAt: 'desc'
           }
