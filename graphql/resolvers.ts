@@ -9,8 +9,8 @@ const resolvers = {
     fetchAdCampaigns: async function(_, args:any, context:any) {
       return await adService.fetchAdCampaigns();
     },
-    fetchAdCampaign: function(_, args:any, context:any) {
-      return {};
+    fetchAdCampaign: async function(_, args:any, context:any) {
+      return await adService.fetchAdCampaign(args.query);
     }
   },
 
