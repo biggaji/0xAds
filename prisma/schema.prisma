@@ -16,8 +16,8 @@ model Campaigns {
   frequency Frequency
   objective CampaignObjective
   oxerId String
-  startDate String
-  endDate String
+  startDate DateTime
+  endDate DateTime
   adsCopy AdCopies?
   targetDelivery AdTargetDeliveries?
   createdAt DateTime @default(now())

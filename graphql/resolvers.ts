@@ -1,13 +1,13 @@
 import { AdCampaign } from "../types/campaign.js";
-import { dateScalarType } from "./typeDefs.js";
+import { dateScalarResolver } from "./typeDefs.js";
 import AdService from "../services/adService.js";
 
 const adService = new AdService();
 
 const resolvers = {
   Query: {
-    fetchAdCampaigns: function(_, args:any, context:any) {
-      return [];
+    fetchAdCampaigns: async function(_, args:any, context:any) {
+      return await adService.fetchAdCampaigns();
     },
     fetchAdCampaign: function(_, args:any, context:any) {
       return {};
@@ -15,25 +15,29 @@ const resolvers = {
   },
 
   Mutation: {
-    createAdCampaign: function(root, args:any, context:any) {
-      return {};
+    createAdCampaign: async function(root, args:any, context:any) {
+      console.log(args.adCampaignInput)
+      return await adService.createAdCampaign(args.adCampaignInput);
     },
-    createAdCampaignCopy: function(root, args:any, context:any) {
-      return {};
+    createAdCampaignCopy: async function(root, args:any, context:any) {
+      return await adService.attachAdCopyToAdCampaign(args.adCopyInput);
     },
-    createAdCampaignTarget: function(root, args:any, context:any) {
-      return {};
+    createAdCampaignTarget: async function(root, args:any, context:any) {
+      return await adService.attachAdTargetToAdCampaign(args.adTargetInput);
     }
   },
 
-  // AdCopy: function(adCampaign:AdCampaign, args:any, context:any) {
-  //   return {};
-  // },
+  AdCampaign: {
+    adsCopy: async function(adCampaign:AdCampaign, args:any, context:any) {
+      return await adService.findCopyByCampaignId(adCampaign.id);
+    },
 
-  // AdTarget: function(adCampaign:AdCampaign, args:any, context:any) {
-  //   return {};
-  // },
-  DateTime: dateScalarType,
+    targetDelivery: async function(adCampaign:AdCampaign, args:any, context:any) {
+      return await adService.findTargetByCampaignId(adCampaign.id);
+    },
+  },
+
+  DateTime: dateScalarResolver,
 }
 
 export default resolvers;
