@@ -1,6 +1,6 @@
 import AdRepository from "../repositories/adRepo.js";
 import ErrorHelper, { ErrorCode } from "../@commons/errorHelper.js";
-import { AdCampaignInput, AdCopyInput, AdTargetInput, CampaignQueryCriterial } from "../types/campaign.js";
+import { AdCampaignInput, AdCopyInput, AdTargetInput, CampaignQueryCriterial, UpdateAdCampaignInput, UpdateAdCopyInput, UpdateAdTargetInput } from "../types/campaign.js";
 import { GraphQLError } from "graphql";
 
 const adRepo = new AdRepository();
@@ -275,6 +275,93 @@ export default class AdService {
     try {
       const campaigns = await adRepo.fetchAdCampaigns();
       return campaigns;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateAdCampaign(payload: UpdateAdCampaignInput) {
+    try {
+      // data validation is done here
+      if (!payload.campaignId) {
+        throw new GraphQLError('campaignId is required', {
+          extensions: {
+            code: ErrorCode.BAD_USER_INPUT,
+            argumentName: 'campaignId'
+          }
+        })
+      }
+
+      // check if campaign exist
+      const campaignExist = await adRepo.findAdCampaignById(payload.campaignId);
+
+      if (campaignExist === null) {
+        throw new GraphQLError('campaign not found', {
+          extensions: {
+            code: ErrorCode.NOT_FOUND,
+          }
+        })
+      }
+      const updateResult = await adRepo.updateAdCampaign(payload.campaignId, payload);
+      return updateResult;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateAdTarget(payload: UpdateAdTargetInput) {
+    try {
+      // data validation is done here
+      if (!payload.campaignId) {
+        throw new GraphQLError('campaignId is required', {
+          extensions: {
+            code: ErrorCode.BAD_USER_INPUT,
+            argumentName: 'campaignId'
+          }
+        })
+      }
+
+      // check if campaign exist
+      const campaignExist = await adRepo.findAdCampaignById(payload.campaignId);
+
+      if (campaignExist === null) {
+        throw new GraphQLError('campaign not found', {
+          extensions: {
+            code: ErrorCode.NOT_FOUND,
+          }
+        })
+      }
+      const updateResult = await adRepo.updateAdCampaignTarget(payload.campaignId, payload);
+      return updateResult;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateAdCopy(payload: UpdateAdCopyInput) {
+    try {
+      // data validation is done here
+      if (!payload.campaignId) {
+        throw new GraphQLError('campaignId is required', {
+          extensions: {
+            code: ErrorCode.BAD_USER_INPUT,
+            argumentName: 'campaignId'
+          }
+        })
+      }
+
+      // check if campaign exist
+      const campaignExist = await adRepo.findAdCampaignById(payload.campaignId);
+
+      if (campaignExist === null) {
+        throw new GraphQLError('campaign not found', {
+          extensions: {
+            code: ErrorCode.NOT_FOUND,
+          }
+        })
+      }
+      const updateResult = await adRepo.updateAdCampaignCopy(payload.campaignId, payload);
+      return updateResult;
     } catch (error) {
       throw error;
     }

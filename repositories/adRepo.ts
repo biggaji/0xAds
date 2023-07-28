@@ -1,5 +1,5 @@
 import db from "../@utils/db.js";
-import { AdCampaign, AdCampaignInput, AdCopyInput, AdTargetInput, CampaignQueryCriterial } from "../types/campaign.js";
+import { AdCampaign, AdCampaignInput, AdCopyInput, AdTargetInput, CampaignQueryCriterial, UpdateAdCampaignInput, UpdateAdCopyInput } from "../types/campaign.js";
 
 // extend the "AdCampaignInput" interface to include extra fields needed to insert into database
 interface AdCampaignInputExtension extends AdCampaignInput {
@@ -60,7 +60,7 @@ export default class AdRepository {
    * @method fetchAdCampaign
    * @param query ""
    * @memberof AdRepository
-   * It search for a campaign via it targetDelivery options - "age", "gender", "intrests", "languages", "os". "os" is required but others are optional
+   * It search for a campaign via it targetDelivery options - "max and min age", "gender", "intrests", "languages", "os". "os" is required but others are optional filters
    */
   async fetchAdCampaign(query:CampaignQueryCriterial) {
     try {
@@ -70,6 +70,7 @@ export default class AdRepository {
           targetDelivery: {
             is: {
               os: { hasSome:query.os },
+              // handle optional filters
               interests: query.interests ? { hasSome: query.interests } : undefined,
               gender: query.gender ? { equals: query.gender } : undefined,
               languages: query.languages ? { hasSome: query.languages } : undefined,
@@ -153,4 +154,61 @@ export default class AdRepository {
       throw error;
     }
   }
+
+  async updateAdCampaign(id: string, payload: UpdateAdCampaignInput) {
+    try {
+      const constructedUpdatePayload = await this.constructUpdateObject(payload);
+      const updatedCampaign = await db.campaigns.update({
+        data: constructedUpdatePayload,
+        where: {
+          id: id
+        }
+      });
+      return updatedCampaign;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async constructUpdateObject(payload: object) {
+    for (const [key, value] of Object.entries(payload)) {
+      if (value === undefined || value === null) {
+        delete payload[key];
+      }
+    }
+    delete payload["campaignId"];
+    return payload;
+  }
+
+  async updateAdCampaignCopy(campaignId: string, payload: UpdateAdCopyInput) {
+    try {
+      const constructedUpdatePayload = await this.constructUpdateObject(payload);
+      const updatedCampaign = await db.adCopies.update({
+        data: constructedUpdatePayload,
+        where: {
+          campaignId: campaignId
+        }
+      });
+      return updatedCampaign;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateAdCampaignTarget(campaignId: string, payload: UpdateAdCampaignInput) {
+    try {
+      const constructedUpdatePayload = await this.constructUpdateObject(payload);
+      const updatedCampaignTarget = await db.adTargetDeliveries.update({
+        data: constructedUpdatePayload,
+        where: {
+          campaignId: campaignId
+        }
+      });
+      return updatedCampaignTarget;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteAdCampaign(campaignId: string) {}
 }

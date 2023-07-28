@@ -164,7 +164,7 @@ const typeDefs = `#graphql
     mediaLink: String!
     websiteUrl: String
     type: AdCopyEnum!
-    campaignId: String!
+    campaignId: ID!
   }
 
   "Input Type for Attaching the Ad Target to the AdCampaign"
@@ -176,7 +176,7 @@ const typeDefs = `#graphql
     interests: [Interests]
     languages: [Languages]
     os: [Os]
-    campaignId: String!
+    campaignId: ID!
   }
 
   "Input Type or Input criteria for querying or fetching a campaign"
@@ -187,6 +187,38 @@ const typeDefs = `#graphql
     interests: [Interests]
     languages: [Languages]
     os: [Os!]
+  }
+
+  "Input Type for updating a AdCampaign"
+  input AdCampaignUpdateInput {
+    dailyBudget: Int
+    currency: Currency
+    frequency: Frequency
+    objective: CampaignObjective
+    startDate: DateTime
+    endDate: DateTime
+    campaignId: ID!
+  }
+
+  "Input Type for updating the Ad Copy for a AdCampaign"
+  input AdCopyUpdateInput {
+    text: String
+    mediaLink: String
+    websiteUrl: String
+    type: AdCopyEnum
+    campaignId: ID!
+  }
+
+  "Input Type for updating the Ad Targets for a AdCampaign"
+  input AdTargetUpdateInput {
+    gender: GenderGroup
+    ageGroup: AgeGroup
+    maxAge: Int
+    minAge: Int
+    interests: [Interests]
+    languages: [Languages]
+    os: [Os]
+    campaignId: ID!
   }
 
  # Will later create an Interface that each response will extend to compily with DRY principle
@@ -232,6 +264,9 @@ const typeDefs = `#graphql
     createAdCampaign(adCampaignInput: AdCampaignInput): AdCampaign!
     createAdCampaignCopy(adCopyInput: AdCopyInput): AdCopy!
     createAdCampaignTarget(adTargetInput: AdTargetInput): AdTargetDelivery!
+    updateAdCampaign(adCampaignUpdateInput: AdCampaignUpdateInput): AdCampaign!
+    updateAdCampaignCopy(adCopyUpdateInput: AdCopyUpdateInput): AdCopy!
+    updateAdCampaignTarget(adTargetUpdateInput: AdTargetUpdateInput): AdTargetDelivery!
   }
 `;
 
