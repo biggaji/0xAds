@@ -221,7 +221,6 @@ const typeDefs = `#graphql
     campaignId: ID!
   }
 
- # Will later create an Interface that each response will extend to compily with DRY principle
   enum ErrorCode {
     UNAUTHENTICATED,
     BAD_REQUEST,
@@ -231,28 +230,8 @@ const typeDefs = `#graphql
     BAD_USER_INPUT
   }
 
-  "AdCampaign creation response"
-  type CreateAdCampaignResponse {
-    success: Boolean!
-    code: ErrorCode!
-    message: String!
-    adCampaign: AdCampaign
-  }
-
-  "AdCopy creation response"
-  type CreateAdCopyResponse {
-    success: Boolean!
-    code: ErrorCode!
-    message: String!
-    adCopy: AdCopy
-  }
-
-  "AdTarget creation response"
-  type CreateAdTargetResponse {
-    success: Boolean!
-    code: ErrorCode!
-    message: String!
-    adTarget: AdTargetDelivery
+  type AdActiveStatus {
+    active: Boolean!
   }
 
   type Query {
@@ -267,6 +246,9 @@ const typeDefs = `#graphql
     updateAdCampaign(adCampaignUpdateInput: AdCampaignUpdateInput): AdCampaign!
     updateAdCampaignCopy(adCopyUpdateInput: AdCopyUpdateInput): AdCopy!
     updateAdCampaignTarget(adTargetUpdateInput: AdTargetUpdateInput): AdTargetDelivery!
+    deleteAdCampaign(id: ID!): Boolean!
+    activateAdCampaign(id: ID!): AdActiveStatus!
+    deActivateAdCampaign(id: ID!): AdActiveStatus!
   }
 `;
 

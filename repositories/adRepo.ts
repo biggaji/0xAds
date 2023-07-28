@@ -6,6 +6,10 @@ interface AdCampaignInputExtension extends AdCampaignInput {
   oxerId: string;
 }
 
+/**
+ * @class AdRepository
+ * Lower access level class to interact with the database
+ */
 export default class AdRepository {
   constructor() {}
 
@@ -66,7 +70,7 @@ export default class AdRepository {
     try {
       const response = await db.campaigns.findFirst({
         where: {
-          // active: true,
+          active: true,
           targetDelivery: {
             is: {
               os: { hasSome:query.os },
@@ -210,5 +214,77 @@ export default class AdRepository {
     }
   }
 
-  async deleteAdCampaign(campaignId: string) {}
+  /**
+   * 
+   * @param campaignId string
+   * Uses a transaction to delete the campaign, target and copy at once
+   */
+  async deleteAdCampaign(campaignId: string) {
+    try {
+      let deleted = false;
+      // start with deleting either from the target or copy table
+      
+      // delete target data
+      const deleteCampaignTarget = db.adTargetDeliveries.delete({
+        where: {
+          campaignId,
+        }
+      });
+  
+      // delete copy data
+      const deleteCampaignCopy = db.adCopies.delete({
+        where: {
+          campaignId,
+        }
+      });
+  
+      // delete the actual campaign data
+      const deleteCampaign = db.campaigns.delete({
+        where: {
+          id: campaignId,
+        }
+      });
+  
+      const tx = await db.$transaction([deleteCampaignCopy, deleteCampaignTarget, deleteCampaign])
+  
+      // since the transaction returns the array containing the data in each model, so I check the length to be sure if has all been deleted
+      if (tx.length === 3) {
+        deleted = true;
+      }
+  
+      return deleted;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async activateAdCampaign(id: string) {
+    try {
+      return await db.campaigns.update({
+        where: {
+          id: id
+        },
+        data: {
+          active: true
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deActivateAdCampaign(id: string) {
+    try {
+      return await db.campaigns.update({
+        where: {
+          id: id
+        },
+        data: {
+          active: false
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

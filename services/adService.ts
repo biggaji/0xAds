@@ -258,7 +258,7 @@ export default class AdService {
       const campaign = await adRepo.fetchAdCampaign(query);
 
       if (campaign === null) {
-        throw new GraphQLError('campaign not found', {
+        throw new GraphQLError('campaign not found or not yet activated', {
           extensions: {
             code: ErrorCode.NOT_FOUND,
           }
@@ -360,8 +360,99 @@ export default class AdService {
           }
         })
       }
+      
       const updateResult = await adRepo.updateAdCampaignCopy(payload.campaignId, payload);
       return updateResult;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteAdCampaign(id: string) {
+    try {
+      // data validation is done here
+      if (!id) {
+        throw new GraphQLError('campaignId is required', {
+          extensions: {
+            code: ErrorCode.BAD_USER_INPUT,
+            argumentName: 'campaignId'
+          }
+        })
+      }
+
+      // check if campaign exist
+      const campaignExist = await adRepo.findAdCampaignById(id);
+
+      if (campaignExist === null) {
+        throw new GraphQLError('campaign not found', {
+          extensions: {
+            code: ErrorCode.NOT_FOUND,
+          }
+        })
+      }
+
+      const txDelete = await adRepo.deleteAdCampaign(id);
+      return txDelete;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async activateAdCampaign(id: string) {
+    try {
+      // data validation is done here
+      if (!id) {
+        throw new GraphQLError('campaignId is required', {
+          extensions: {
+            code: ErrorCode.BAD_USER_INPUT,
+            argumentName: 'campaignId'
+          }
+        })
+      }
+
+      // check if campaign exist
+      const campaignExist = await adRepo.findAdCampaignById(id);
+
+      if (campaignExist === null) {
+        throw new GraphQLError('campaign not found', {
+          extensions: {
+            code: ErrorCode.NOT_FOUND,
+          }
+        })
+      }
+
+      const activated = await adRepo.activateAdCampaign(id);
+      return { active: activated.active };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deActivateAdCampaign(id: string) {
+    try {
+      // data validation is done here
+      if (!id) {
+        throw new GraphQLError('campaignId is required', {
+          extensions: {
+            code: ErrorCode.BAD_USER_INPUT,
+            argumentName: 'campaignId'
+          }
+        })
+      }
+
+      // check if campaign exist
+      const campaignExist = await adRepo.findAdCampaignById(id);
+
+      if (campaignExist === null) {
+        throw new GraphQLError('campaign not found', {
+          extensions: {
+            code: ErrorCode.NOT_FOUND,
+          }
+        })
+      }
+
+      const deActivated = await adRepo.deActivateAdCampaign(id);
+      return { active: deActivated.active };
     } catch (error) {
       throw error;
     }
