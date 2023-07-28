@@ -65,6 +65,35 @@ type AdTargetInput = {
   campaignId: string
 }
 
+interface UpdateAdCampaignInput {
+  dailyBudget?: number,
+  currency?: Currency,
+  frequency?: Frequency,
+  objective?: CampaignObjective,
+  startDate?: string,
+  endDate?: string,
+  campaignId: string
+}
+
+type UpdateAdCopyInput = {
+  text?: string,
+  mediaLink?: string,
+  websiteUrl?: string,
+  type?: AdCopyType,
+  campaignId: string
+}
+
+type UpdateAdTargetInput = {
+  gender?: GenderGroup,
+  ageGroup?: AgeGroup,
+  maxAge?: number,
+  minAge?: number
+  interests?: Interests[],
+  languages?: Languages[],
+  os?: Os[],
+  campaignId: string
+}
+
 type CampaignQueryCriterial = {
   gender?: GenderGroup,
   maxAge?: number,
@@ -130,5 +159,5 @@ enum AgeGroup {
 
 
 export {
-  AdCampaign, AdCopy, AdTargetDelivery, AdCopyInput, AdTargetInput, AdCampaignInput, CampaignQueryCriterial
+  AdCampaign, AdCopy, AdTargetDelivery, AdCopyInput, AdTargetInput, AdCampaignInput, CampaignQueryCriterial, UpdateAdCampaignInput, UpdateAdCopyInput, UpdateAdTargetInput
 }
