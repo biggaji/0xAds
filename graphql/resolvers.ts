@@ -16,7 +16,6 @@ const resolvers = {
   
   Mutation: {
     createAdCampaign: async function(root, args:any, context:any) {
-      console.log(args.adCampaignInput)
       return await adService.createAdCampaign(args.adCampaignInput);
     },
     createAdCampaignCopy: async function(root, args:any, context:any) {
@@ -33,7 +32,16 @@ const resolvers = {
     },
     updateAdCampaignTarget: async function(_, args:any, context:any) {
       return await adService.updateAdTarget(args.adTargetUpdateInput);
-    }
+    },
+    deleteAdCampaign: async function (_, args:any, context:any) {
+      return await adService.deleteAdCampaign(args.id);
+    },
+    deActivateAdCampaign:async function (_, args:any, context:any) {
+      return await adService.deActivateAdCampaign(args.id);
+    },
+    activateAdCampaign:async function (_, args:any, context:any) {
+      return await adService.activateAdCampaign(args.id);
+    },
   },
 
   AdCampaign: {

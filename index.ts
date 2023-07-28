@@ -16,7 +16,6 @@ import ErrorHelper from "./@commons/errorHelper.js";
 const server = new ApolloServer({ typeDefs, resolvers,
   // use the formatError hook to modify error before it's sent back to the client
   formatError: (fmtError, origError) => {
-    console.log(fmtError) //to be removed
     return ErrorHelper.ProcessError(fmtError);
   }
 });
