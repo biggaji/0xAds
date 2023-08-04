@@ -103,6 +103,13 @@ type CampaignQueryCriterial = {
   os: Os[],
 }
 
+type HydratedUser = {
+  id: any,
+  email: string,
+  firstName: string,
+  lastName: string
+}
+
 enum Currency {
   PRSH="PRSH",
   NGN="NGN"
@@ -159,5 +166,5 @@ enum AgeGroup {
 
 
 export {
-  AdCampaign, AdCopy, AdTargetDelivery, AdCopyInput, AdTargetInput, AdCampaignInput, CampaignQueryCriterial, UpdateAdCampaignInput, UpdateAdCopyInput, UpdateAdTargetInput
+  AdCampaign, AdCopy, AdTargetDelivery, AdCopyInput, AdTargetInput, AdCampaignInput, CampaignQueryCriterial, UpdateAdCampaignInput, UpdateAdCopyInput, UpdateAdTargetInput, HydratedUser
 }
