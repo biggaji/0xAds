@@ -8,7 +8,7 @@ const adRepo = new AdRepository();
 export default class AdService {
   constructor() {}
 
-  async createAdCampaign(payload: AdCampaignInput) {
+  async createAdCampaign(payload: AdCampaignInput, oxerId: string) {
     const { currency, dailyBudget, endDate, startDate, frequency, objective } = payload;
     
     try {
@@ -57,8 +57,6 @@ export default class AdService {
           }
         })
       }
-
-      const oxerId = `${Math.floor(Math.random() * 1000) + 1}`;
 
       // hydrate payload object
       const hydratedCampaignPayload = {

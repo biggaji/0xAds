@@ -7,6 +7,7 @@
   "author": "Tobiloba Ajibade <tobiajibade@yandex.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/connect-flash": "^0.0.37",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
@@ -32,6 +33,7 @@
   "dependencies": {
     "@apollo/server": "^4.4.0",
     "@prisma/client": "^5.0.0",
+    "axios": "^1.4.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

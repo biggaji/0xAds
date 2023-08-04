@@ -19,8 +19,8 @@ export const dateScalarResolver = new GraphQLScalarType({
     //This function is called when the DateTime type is used in argument as a scalar type and the value is hardcoded
   // converts the value to the back-end date format
   parseLiteral(ast) {
-    if (ast.kind === Kind.INT) {
-      return new Date(parseInt(ast.value, 10));
+    if (ast.kind === Kind.STRING) {
+      return new Date(ast.value);
     }
     return null;
   },
@@ -234,9 +234,14 @@ const typeDefs = `#graphql
     active: Boolean!
   }
 
+  type OxhutIdentityProviderResponse {
+    sharedAccessToken: String!
+  }
+
   type Query {
     fetchAdCampaign(query: CampaignRequestQuery!): AdCampaign!
     fetchAdCampaigns: [AdCampaign]!
+    authenticateWithOxhutIdentityProvider(email: String!, password: String!): OxhutIdentityProviderResponse!
   }
 
   type Mutation {
