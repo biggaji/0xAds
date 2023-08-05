@@ -4,6 +4,7 @@ COPY package*.json yarn*.lock ./
 RUN yarn install --production && \
     yarn cache clean
 COPY . .
+RUN yarn global add typescript
 RUN yarn build
 RUN npx prisma generate
 
