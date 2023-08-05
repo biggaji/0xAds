@@ -14,6 +14,7 @@ COPY package*.json yarn*.lock ./
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./
 COPY --from=build /usr/src/app/migrate_db_and_start.sh ./
+COPY --from=build /usr/src/app/prisma ./prisma
 RUN chmod +x migrate_db_and_start.sh
 RUN yarn global add pm2
 EXPOSE 3000
