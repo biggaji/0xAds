@@ -2,10 +2,10 @@
  * Setup env loader using dotenv package
  * use the package only in development
  */
-import { config } from "dotenv";
-if (process.env.NODE_ENV !== "production") {
-  config();
-};
+// if (process.env.NODE_ENV !== "production") {
+//   import { config } from "dotenv";
+//   config();
+// };
 
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from '@apollo/server/standalone';
