@@ -1,42 +1,41 @@
-import { GraphQLError, GraphQLScalarType, Kind } from "graphql";
-import { ErrorCode } from "../@commons/errorHelper.js";
+import { GraphQLError, GraphQLScalarType, Kind } from 'graphql';
+import { ErrorCode } from '../@commons/errorHelper.js';
 
 export const dateScalarResolver = new GraphQLScalarType({
-  name: "DateTime",
-  description: "A custom scalar type representing a date format",
-  // converts the date from the back-end format to an ISO format
+  name: 'DateTime',
+  description: 'A custom scalar type representing a date format',
+
+  // Converts the date from the back-end format to an ISO format
   serialize(value) {
     if (value instanceof Date) {
       return value.toISOString();
     } else {
-      throw new GraphQLError("Date serializer expected a `DateTime` object", {
+      throw new GraphQLError('Date serializer expected a `DateTime` object', {
         extensions: {
-          code: ErrorCode.INTERNAL_SERVER_ERROR
-        }
+          code: ErrorCode.INTERNAL_SERVER_ERROR,
+        },
       });
     }
   },
-    //This function is called when the DateTime type is used in argument as a scalar type and the value is hardcoded
-  // converts the value to the back-end date format
+  //This function is called when the DateTime type is used in argument as a scalar type and the value is hardcoded converts the value to the back-end date format
   parseLiteral(ast) {
     if (ast.kind === Kind.STRING) {
       return new Date(ast.value);
     }
     return null;
   },
-  //This function is called when the DateTime type is used in a variable as argument type
-  // converts the value to the back-end date format
+  //This function is called when the DateTime type is used in a variable as argument type converts the value to the back-end date format
   parseValue(value) {
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       return new Date(value);
     } else {
-      throw new GraphQLError("Date scalar parser expected a `string`", {
+      throw new GraphQLError('Date scalar parser expected a `string`', {
         extensions: {
-          code: ErrorCode.INTERNAL_SERVER_ERROR
-        }
-      })
+          code: ErrorCode.INTERNAL_SERVER_ERROR,
+        },
+      });
     }
-  }
+  },
 });
 
 const typeDefs = `#graphql

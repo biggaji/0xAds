@@ -1,5 +1,13 @@
-import db from "../@utils/db.js";
-import { AdCampaign, AdCampaignInput, AdCopyInput, AdTargetInput, CampaignQueryCriterial, UpdateAdCampaignInput, UpdateAdCopyInput } from "../types/campaign.js";
+import db from '../@utils/db.js';
+import {
+  AdCampaign,
+  AdCampaignInput,
+  AdCopyInput,
+  AdTargetInput,
+  CampaignQueryCriterial,
+  UpdateAdCampaignInput,
+  UpdateAdCopyInput,
+} from '../types/campaign.js';
 
 // extend the "AdCampaignInput" interface to include extra fields needed to insert into database
 interface AdCampaignInputExtension extends AdCampaignInput {
@@ -21,9 +29,10 @@ export default class AdRepository {
     const { currency, dailyBudget, endDate, startDate, frequency, objective, oxerId } = payload;
     try {
       const response = await db.campaigns.create({
-        data: { currency, dailyBudget, endDate, startDate, frequency, objective, oxerId }, include: { adsCopy: true, targetDelivery: true }
+        data: { currency, dailyBudget, endDate, startDate, frequency, objective, oxerId },
+        include: { adsCopy: true, targetDelivery: true },
       });
-      
+
       return response;
     } catch (error) {
       throw error;
@@ -34,9 +43,15 @@ export default class AdRepository {
     const { campaignId, mediaLink, text, type, websiteUrl } = payload;
     try {
       const response = await db.adCopies.create({
-        data: { mediaLink, text, type, websiteUrl, campaign: {
-          connect: { id: campaignId }
-        }}
+        data: {
+          mediaLink,
+          text,
+          type,
+          websiteUrl,
+          campaign: {
+            connect: { id: campaignId },
+          },
+        },
       });
 
       return response;
@@ -46,12 +61,21 @@ export default class AdRepository {
   }
 
   async recordAndAttachAdCampaignTarget(payload: AdTargetInput) {
-    const { campaignId, ageGroup, gender, interests, languages, maxAge,  minAge, os  } = payload;
+    const { campaignId, ageGroup, gender, interests, languages, maxAge, minAge, os } = payload;
     try {
       const response = await db.adTargetDeliveries.create({
-        data: { ageGroup, maxAge, minAge, languages, os, interests, gender, campaign: {
-          connect: { id: campaignId }
-        }}
+        data: {
+          ageGroup,
+          maxAge,
+          minAge,
+          languages,
+          os,
+          interests,
+          gender,
+          campaign: {
+            connect: { id: campaignId },
+          },
+        },
       });
 
       return response;
@@ -66,14 +90,14 @@ export default class AdRepository {
    * @memberof AdRepository
    * It search for a campaign via it targetDelivery options - "max and min age", "gender", "intrests", "languages", "os". "os" is required but others are optional filters
    */
-  async fetchAdCampaign(query:CampaignQueryCriterial) {
+  async fetchAdCampaign(query: CampaignQueryCriterial) {
     try {
       const response = await db.campaigns.findFirst({
         where: {
           active: true,
           targetDelivery: {
             is: {
-              os: { hasSome:query.os },
+              os: { hasSome: query.os },
               // handle optional filters
               interests: query.interests ? { hasSome: query.interests } : undefined,
               gender: query.gender ? { equals: query.gender } : undefined,
@@ -82,7 +106,7 @@ export default class AdRepository {
               minAge: query.minAge ? { gte: query.minAge } : undefined,
             },
           },
-        }
+        },
       });
       return response;
     } catch (error) {
@@ -94,8 +118,8 @@ export default class AdRepository {
     try {
       const campaign = await db.campaigns.findUnique({
         where: {
-          id: campaignId
-        }
+          id: campaignId,
+        },
       });
 
       if (campaign === null) {
@@ -112,8 +136,8 @@ export default class AdRepository {
     try {
       const target = await db.adTargetDeliveries.findUnique({
         where: {
-          campaignId: campaignId
-        }
+          campaignId: campaignId,
+        },
       });
 
       if (target === null) {
@@ -130,8 +154,8 @@ export default class AdRepository {
     try {
       const copy = await db.adCopies.findUnique({
         where: {
-          campaignId: campaignId
-        }
+          campaignId: campaignId,
+        },
       });
 
       if (copy === null) {
@@ -146,13 +170,11 @@ export default class AdRepository {
 
   async fetchAdCampaigns() {
     try {
-      const response = await db.campaigns.findMany(
-        {
-          orderBy: {
-            createdAt: 'desc'
-          }
-        }
-      );
+      const response = await db.campaigns.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
       return response;
     } catch (error) {
       throw error;
@@ -165,8 +187,8 @@ export default class AdRepository {
       const updatedCampaign = await db.campaigns.update({
         data: constructedUpdatePayload,
         where: {
-          id: id
-        }
+          id: id,
+        },
       });
       return updatedCampaign;
     } catch (error) {
@@ -180,7 +202,7 @@ export default class AdRepository {
         delete payload[key];
       }
     }
-    delete payload["campaignId"];
+    delete payload['campaignId'];
     return payload;
   }
 
@@ -190,8 +212,8 @@ export default class AdRepository {
       const updatedCampaign = await db.adCopies.update({
         data: constructedUpdatePayload,
         where: {
-          campaignId: campaignId
-        }
+          campaignId: campaignId,
+        },
       });
       return updatedCampaign;
     } catch (error) {
@@ -205,8 +227,8 @@ export default class AdRepository {
       const updatedCampaignTarget = await db.adTargetDeliveries.update({
         data: constructedUpdatePayload,
         where: {
-          campaignId: campaignId
-        }
+          campaignId: campaignId,
+        },
       });
       return updatedCampaignTarget;
     } catch (error) {
@@ -215,7 +237,7 @@ export default class AdRepository {
   }
 
   /**
-   * 
+   *
    * @param campaignId string
    * Uses a transaction to delete the campaign, target and copy at once
    */
@@ -223,35 +245,35 @@ export default class AdRepository {
     try {
       let deleted = false;
       // start with deleting either from the target or copy table
-      
+
       // delete target data
       const deleteCampaignTarget = db.adTargetDeliveries.delete({
         where: {
           campaignId,
-        }
+        },
       });
-  
+
       // delete copy data
       const deleteCampaignCopy = db.adCopies.delete({
         where: {
           campaignId,
-        }
+        },
       });
-  
+
       // delete the actual campaign data
       const deleteCampaign = db.campaigns.delete({
         where: {
           id: campaignId,
-        }
+        },
       });
-  
-      const tx = await db.$transaction([deleteCampaignCopy, deleteCampaignTarget, deleteCampaign])
-  
+
+      const tx = await db.$transaction([deleteCampaignCopy, deleteCampaignTarget, deleteCampaign]);
+
       // since the transaction returns the array containing the data in each model, so I check the length to be sure if has all been deleted
       if (tx.length === 3) {
         deleted = true;
       }
-  
+
       return deleted;
     } catch (error) {
       throw error;
@@ -262,11 +284,11 @@ export default class AdRepository {
     try {
       return await db.campaigns.update({
         where: {
-          id: id
+          id: id,
         },
         data: {
-          active: true
-        }
+          active: true,
+        },
       });
     } catch (error) {
       throw error;
@@ -277,11 +299,11 @@ export default class AdRepository {
     try {
       return await db.campaigns.update({
         where: {
-          id: id
+          id: id,
         },
         data: {
-          active: false
-        }
+          active: false,
+        },
       });
     } catch (error) {
       throw error;
