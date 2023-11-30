@@ -19,6 +19,6 @@ I used my [Oxhut](https://github.com/biggaji/0xhut) server to handle authenticat
 
 ![](https://res.cloudinary.com/dahn8uiyc/image/upload/v1701356179/lyirtfsnwrhaax6vhhoz.png)
 
-I will add more notes I progress. Still under development.
+I will add more notes as I progress. Still under development.
 
 Thank you for stopping by. Happy coding!
