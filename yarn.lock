@@ -896,6 +896,13 @@ graphql@*, graphql@^16.6.0:
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
   integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
+handlebars-converter@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/handlebars-converter/-/handlebars-converter-1.0.2.tgz#c43b8b95941a2d8e9bed4a016e92c188efeacb6c"
+  integrity sha512-/WFxIyBBRdtJyive9wQ1XUebI38O9AHwzoiwU1hHjoyf7IaJK/hQhi499KMUiFVbe1iqsaEhZ/TPm0I5Bz8GzQ==
+  dependencies:
+    handlebars "^4.7.8"
+
 handlebars@^4.7.7:
   version "4.7.7"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.7.tgz#9ce33416aad02dbd6c8fafa8240d5d98004945a1"
@@ -903,6 +910,18 @@ handlebars@^4.7.7:
   dependencies:
     minimist "^1.2.5"
     neo-async "^2.6.0"
+    source-map "^0.6.1"
+    wordwrap "^1.0.0"
+  optionalDependencies:
+    uglify-js "^3.1.4"
+
+handlebars@^4.7.8:
+  version "4.7.8"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.8.tgz#41c42c18b1be2365439188c77c6afae71c0cd9e9"
+  integrity sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==
+  dependencies:
+    minimist "^1.2.5"
+    neo-async "^2.6.2"
     source-map "^0.6.1"
     wordwrap "^1.0.0"
   optionalDependencies:
@@ -924,13 +943,6 @@ has@^1.0.3:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
-
-hbs-to-html@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/hbs-to-html/-/hbs-to-html-1.0.0.tgz#0726bbe242980bbb0e2728edd049d45818970f78"
-  integrity sha512-5lCajnQjMP/80Ug63BKsqVSPzXMrwjImr7EavdD2LqNcuvWWsZKya01ln7EY0xfxxwFhQ1xzjAr36C1JOK9F8w==
-  dependencies:
-    handlebars "^4.7.7"
 
 http-errors@2.0.0:
   version "2.0.0"
@@ -1127,7 +1139,7 @@ negotiator@0.6.3, negotiator@^0.6.3:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
-neo-async@^2.6.0:
+neo-async@^2.6.0, neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
